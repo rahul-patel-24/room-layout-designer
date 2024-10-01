@@ -1,6 +1,6 @@
 import React from 'react';
 import { Room } from '../types';
-import { Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Box } from '@mui/material';
+import { Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Box, Typography, Grid } from '@mui/material';
 
 interface RoomListProps {
   rooms: Room[];
@@ -9,8 +9,9 @@ interface RoomListProps {
 
 const RoomList: React.FC<RoomListProps> = ({ rooms, onEditRoom }) => {
   return (
-    <Box sx={{ width: '100%', overflowX: 'auto', margin: '20px 0' }}>
-      <TableContainer component={Paper} sx={{ maxWidth: '800px', width: '100%' }}>
+    <Box sx={{ width: '100%', margin: '20px 0' }}>
+      {/* Table for larger screens */}
+      <TableContainer component={Paper} sx={{ display: { xs: 'none', md: 'block' }, width: '100%' }}>
         <Table>
           <TableHead>
             <TableRow>
@@ -42,6 +43,23 @@ const RoomList: React.FC<RoomListProps> = ({ rooms, onEditRoom }) => {
           </TableBody>
         </Table>
       </TableContainer>
+
+      {/* Stacked layout for smaller screens */}
+      <Grid container spacing={2} sx={{ display: { xs: 'flex', md: 'none' }, marginTop: 2 }}>
+        {rooms.map(room => (
+          <Grid item xs={12} key={room.id}>
+            <Paper sx={{ padding: 2, marginBottom: 1 }}>
+              <Typography variant="h6">{room.name}</Typography>
+              <Typography><strong>ID:</strong> {room.id}</Typography>
+              <Typography><strong>Address:</strong> {room.address}</Typography>
+              <Typography><strong>Width:</strong> {room.width}</Typography>
+              <Typography><strong>Height:</strong> {room.height}</Typography>
+              <Typography><strong>Racks:</strong> {room.racks.length}</Typography>
+              <Button variant="text" onClick={() => onEditRoom(room)}>Edit</Button>
+            </Paper>
+          </Grid>
+        ))}
+      </Grid>
     </Box>
   );
 };
