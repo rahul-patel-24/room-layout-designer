@@ -4,23 +4,24 @@ import { Box } from '@mui/material';
 interface RackProps {
   width?: number;
   height?: number;
+  frontSideDirection?:string
 }
 
-const Rack: React.FC<RackProps> = ({ width = 100, height = 50 }) => {
+const Rack: React.FC<RackProps> = ({ width = 100, height = 50, frontSideDirection = 'north' }) => {
   return (
     <Box
       width={width}
       height={height}
-      borderTop="2px solid red"
+      borderTop="2px dotted red"
       borderBottom='5px solid green'
-      borderLeft='1px solid black'
-      borderRight='1px solid black'
+      borderLeft='1px dotted black'
+      borderRight='1px dotted black'
       mt={2}
       display="flex"
       alignItems="center"
       justifyContent="center"
     >
-      Rack {width} * {height}
+      Rack {height} * {width}
     </Box>
   );
 };

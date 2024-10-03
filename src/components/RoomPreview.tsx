@@ -15,6 +15,45 @@ const RoomPreview: React.FC<RoomPreviewProps> = ({ room }) => {
     height: (rackHeight / height) * 100 // Convert to percentage
   });
 
+  // Function to get border styles based on frontSideDirection
+  const getBorderStyles = (direction: string) => {
+    // Default border for left and right
+    const baseBorder = '1px dotted black'; 
+    // Initialize border styles
+    let topBorder = baseBorder;
+    let bottomBorder = baseBorder;
+    let leftBorder = baseBorder;
+    let rightBorder = baseBorder;
+  
+    // Set borders based on frontSideDirection
+    switch (direction) {
+      case 'north':
+        topBorder = '5px solid green'; // Front
+        bottomBorder = '2px dotted red'; // Back
+        break;
+      case 'south':
+        topBorder = '2px dotted red'; // Back
+        bottomBorder = '5px solid green'; // Front
+        break;
+      case 'east':
+        leftBorder = '2px dotted red'; // Back
+        rightBorder = '5px solid green'; // Front
+        break;
+      case 'west':
+        leftBorder = '5px solid green'; // Front
+        rightBorder = '2px dotted red'; // Back
+        break;
+    }
+  
+    return {
+      borderTop: topBorder,
+      borderBottom: bottomBorder,
+      borderLeft: leftBorder,
+      borderRight: rightBorder,
+    };
+  };
+  
+
   return (
     <Box
       sx={{
@@ -80,6 +119,10 @@ const RoomPreview: React.FC<RoomPreviewProps> = ({ room }) => {
       {/* Render Racks */}
       {room.racks?.map((rack) => {
         const { width: rackWidth, height: rackHeight } = calculateRackSize(rack.width, rack.height);
+        
+        // Get border styles based on frontSideDirection
+        const borderStyles = getBorderStyles(rack.frontSideDirection);
+
         return (
           <Box
             key={rack.id}
@@ -89,10 +132,15 @@ const RoomPreview: React.FC<RoomPreviewProps> = ({ room }) => {
               height: `${rackHeight}%`, // Set height as a percentage
               left: `${(rack.x / width) * 100}%`, // Position as a percentage of room width
               top: `${(rack.y / height) * 100}%`, // Position as a percentage of room height
-              backgroundColor: rack.frontSideDirection === 'front' ? 'lightgreen' : 'lightcoral',
-              borderRadius: '3px',
+              backgroundColor: 'white', // Neutral background color
+              ...borderStyles, // Apply dynamic border styles
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
             }}
-          />
+          >
+            Rack {rack.height} * {rack.width}
+          </Box>
         );
       })}
     </Box>
