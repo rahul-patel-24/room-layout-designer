@@ -38,7 +38,7 @@ const RoomForm: React.FC<RoomFormProps> = ({ room, onAddRoom, isEditMode, setEdi
       address,
       width,
       height,
-      racks: [],
+      racks: room?.racks ? room.racks : [],
       door: {
         direction: 'top',
         width: 0,
