@@ -89,7 +89,7 @@ const RoomPreview: React.FC<RoomPreviewProps> = ({ room }) => {
               height: `${rackHeight}%`, // Set height as a percentage
               left: `${(rack.x / width) * 100}%`, // Position as a percentage of room width
               top: `${(rack.y / height) * 100}%`, // Position as a percentage of room height
-              backgroundColor: rack.orientation === 'front' ? 'lightgreen' : 'lightcoral',
+              backgroundColor: rack.frontSideDirection === 'front' ? 'lightgreen' : 'lightcoral',
               borderRadius: '3px',
             }}
           />

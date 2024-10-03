@@ -38,11 +38,8 @@ const RoomEditor: React.FC<RoomEditorProps> = ({ room }) => {
           </Box>
         </Box>
 
-        {/* Room Preview with Direction Symbols in the Top-Right Corner */}
+        {/* Room Preview */}
         <Box display="flex" justifyContent="center" alignItems="center" width={{ xs: '100%', md: '80%' }} position="relative">
-          
-         
-
           {/* Room Preview */}
           <RoomPreview room={room} />
         </Box>

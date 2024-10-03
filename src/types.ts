@@ -20,5 +20,5 @@ export interface Rack {
   height: number;
   x: number;
   y: number;
-  orientation: string;
+  frontSideDirection: string;
 }

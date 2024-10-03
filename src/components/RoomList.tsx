@@ -1,6 +1,6 @@
 import React from 'react';
 import { Room } from '../types';
-import { Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Box, Typography, Grid } from '@mui/material';
+import { Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Box, Typography, Grid, Grid2 } from '@mui/material';
 
 interface RoomListProps {
   rooms: Room[];
@@ -16,28 +16,28 @@ const RoomList: React.FC<RoomListProps> = ({ rooms, onEditRoom }) => {
           <TableHead>
             <TableRow>
               <TableCell>ID</TableCell>
+              <TableCell>Actions</TableCell>
               <TableCell>Name</TableCell>
               <TableCell>Address</TableCell>
               <TableCell>Width</TableCell>
               <TableCell>Height</TableCell>
               <TableCell>Racks</TableCell>
-              <TableCell>Actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {rooms.map(room => (
               <TableRow key={room.id}>
                 <TableCell>{room.id}</TableCell>
-                <TableCell>{room.name}</TableCell>
-                <TableCell>{room.address}</TableCell>
-                <TableCell>{room.width}</TableCell>
-                <TableCell>{room.height}</TableCell>
-                <TableCell>{room.racks.length}</TableCell>
                 <TableCell>
                   <Button variant="text" onClick={() => onEditRoom(room)}>
                     Edit
                   </Button>
                 </TableCell>
+                <TableCell>{room.name}</TableCell>
+                <TableCell>{room.address}</TableCell>
+                <TableCell>{room.width}</TableCell>
+                <TableCell>{room.height}</TableCell>
+                <TableCell>{room.racks.length}</TableCell>
               </TableRow>
             ))}
           </TableBody>
@@ -45,10 +45,10 @@ const RoomList: React.FC<RoomListProps> = ({ rooms, onEditRoom }) => {
       </TableContainer>
 
       {/* Stacked layout for smaller screens */}
-      <Grid container spacing={2} sx={{ display: { xs: 'flex', md: 'none' }, marginTop: 2 }}>
+      <Grid2 container  spacing={2} sx={{ display: { xs: 'flex', md: 'none' }, marginTop: 2 }}>
         {rooms.map(room => (
-          <Grid item xs={12} key={room.id}>
-            <Paper sx={{ padding: 2, marginBottom: 1 }}>
+          <Grid2   key={room.id}>
+            <Paper  sx={{ padding: 2, marginBottom: 1 }}>
               <Typography variant="h6">{room.name}</Typography>
               <Typography><strong>ID:</strong> {room.id}</Typography>
               <Typography><strong>Address:</strong> {room.address}</Typography>
@@ -57,9 +57,9 @@ const RoomList: React.FC<RoomListProps> = ({ rooms, onEditRoom }) => {
               <Typography><strong>Racks:</strong> {room.racks.length}</Typography>
               <Button variant="text" onClick={() => onEditRoom(room)}>Edit</Button>
             </Paper>
-          </Grid>
+          </Grid2>
         ))}
-      </Grid>
+      </Grid2>
     </Box>
   );
 };

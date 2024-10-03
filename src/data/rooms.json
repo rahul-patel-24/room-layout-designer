@@ -6,12 +6,19 @@
         "width": 600,
         "height": 400,
         "racks": [
-            { "id": "room_1_rack_1", "width": 100, "height": 200, "x": 50, "y": 50, "orientation": "front" }
+            {
+                "id": "room_1_rack_1",
+                "width": 100,
+                "height": 200,
+                "x": 50,
+                "y": 50,
+                "frontSideDirection": "north"
+            }
         ],
         "door": {
             "direction": "left",
             "position": 50,
-            "width": 50 
+            "width": 50
         }
     },
     {
@@ -21,12 +28,19 @@
         "width": 800,
         "height": 500,
         "racks": [
-            { "id": "room_2_rack_1", "width": 150, "height": 250, "x": 100, "y": 100, "orientation": "back" }
+            {
+                "id": "room_2_rack_1",
+                "width": 150,
+                "height": 250,
+                "x": 100,
+                "y": 100,
+                "frontSideDirection": "south"
+            }
         ],
         "door": {
             "direction": "right",
             "position": 100,
-            "width":50
+            "width": 50
         }
     },
     {
@@ -36,13 +50,27 @@
         "width": 700,
         "height": 450,
         "racks": [
-            { "id": "room_3_rack_1", "width": 120, "height": 220, "x": 30, "y": 80, "orientation": "front" },
-            { "id": "room_3_rack_2", "width": 100, "height": 200, "x": 400, "y": 100, "orientation": "side" }
+            {
+                "id": "room_3_rack_1",
+                "width": 120,
+                "height": 220,
+                "x": 30,
+                "y": 80,
+                "frontSideDirection": "north"
+            },
+            {
+                "id": "room_3_rack_2",
+                "width": 100,
+                "height": 200,
+                "x": 400,
+                "y": 100,
+                "frontSideDirection": "east"
+            }
         ],
         "door": {
             "direction": "top",
             "position": 200,
-            "width":50
+            "width": 50
         }
     },
     {
@@ -52,13 +80,27 @@
         "width": 900,
         "height": 600,
         "racks": [
-            { "id": "room_4_rack_1", "width": 200, "height": 300, "x": 50, "y": 50, "orientation": "back" },
-            { "id": "room_4_rack_2", "width": 150, "height": 250, "x": 500, "y": 200, "orientation": "front" }
+            {
+                "id": "room_4_rack_1",
+                "width": 200,
+                "height": 300,
+                "x": 50,
+                "y": 50,
+                "frontSideDirection": "south"
+            },
+            {
+                "id": "room_4_rack_2",
+                "width": 150,
+                "height": 250,
+                "x": 500,
+                "y": 200,
+                "frontSideDirection": "north"
+            }
         ],
         "door": {
             "direction": "bottom",
             "position": 100,
-            "width":50
+            "width": 50
         }
     },
     {
@@ -68,12 +110,19 @@
         "width": 650,
         "height": 400,
         "racks": [
-            { "id": "room_5_rack_1", "width": 130, "height": 230, "x": 60, "y": 60, "orientation": "front" }
+            {
+                "id": "room_5_rack_1",
+                "width": 130,
+                "height": 230,
+                "x": 60,
+                "y": 60,
+                "frontSideDirection": "north"
+            }
         ],
         "door": {
             "direction": "left",
             "position": 30,
-            "width":50
+            "width": 50
         }
     },
     {
@@ -83,13 +132,27 @@
         "width": 850,
         "height": 550,
         "racks": [
-            { "id": "room_6_rack_1", "width": 170, "height": 270, "x": 80, "y": 90, "orientation": "back" },
-            { "id": "room_6_rack_2", "width": 180, "height": 280, "x": 500, "y": 100, "orientation": "side" }
+            {
+                "id": "room_6_rack_1",
+                "width": 170,
+                "height": 270,
+                "x": 80,
+                "y": 90,
+                "frontSideDirection": "south"
+            },
+            {
+                "id": "room_6_rack_2",
+                "width": 180,
+                "height": 280,
+                "x": 500,
+                "y": 100,
+                "frontSideDirection": "east"
+            }
         ],
         "door": {
             "direction": "right",
             "position": 80,
-            "width":50
+            "width": 50
         }
     },
     {
@@ -99,12 +162,19 @@
         "width": 720,
         "height": 480,
         "racks": [
-            { "id": "room_7_rack_1", "width": 160, "height": 260, "x": 20, "y": 40, "orientation": "front" }
+            {
+                "id": "room_7_rack_1",
+                "width": 160,
+                "height": 260,
+                "x": 20,
+                "y": 40,
+                "frontSideDirection": "north"
+            }
         ],
         "door": {
             "direction": "top",
             "position": 100,
-            "width":50
+            "width": 50
         }
     }
 ]

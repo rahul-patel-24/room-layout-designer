@@ -2,11 +2,7 @@ import React from 'react';
 import { useDrag } from 'react-dnd';
 import { Card } from '@mui/material';
 
-interface Rack {
-  id: number;
-  width: number;
-  height: number;
-}
+
 
 interface SidebarProps {
   racks: Rack[];
@@ -21,7 +17,7 @@ const predefinedRacks: Rack[] = [
 
 const Sidebar: React.FC<SidebarProps> = ({ racks, setRacks }) => {
   const handleDrop = (rack: Rack) => {
-    setRacks([...racks, { ...rack, x: 0, y: 0, orientation: 'front' }]);
+    setRacks([...racks, { ...rack, x: 0, y: 0, frontSideDirection: 'front' }]);
   };
 
   return (
