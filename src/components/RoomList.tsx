@@ -1,6 +1,6 @@
 import React from 'react';
 import { Room } from '../types';
-import { Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Box, Typography, Grid, Grid2 } from '@mui/material';
+import { Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Box, Typography, Grid2 } from '@mui/material';
 
 interface RoomListProps {
   rooms: Room[];

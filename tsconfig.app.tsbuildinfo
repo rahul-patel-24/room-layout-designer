@@ -1,0 +1,1 @@
+{"root":["./src/app.tsx","./src/main.tsx","./src/types.ts","./src/vite-env.d.ts","./src/components/rack.tsx","./src/components/roomeditor.tsx","./src/components/roomform.tsx","./src/components/roomlist.tsx","./src/components/roompreview.tsx","./src/components/saveconfiguration.tsx","./src/components/sidebar.tsx","./src/hooks/useroomdata.ts"],"version":"5.6.2"}

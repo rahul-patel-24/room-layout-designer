@@ -9,7 +9,7 @@ import RoomEditor from './components/RoomEditor';
 const App: React.FC = () => {
   const typedRoomsData: Room[] = roomsData;
   const [rooms, setRooms] = useState<Room[]>(typedRoomsData);
-  const [editingRoom, setEditingRoom] = useState<Room | null | []>(null);
+  const [editingRoom, setEditingRoom] = useState<Room | null>(null); // Changed to null
   const [isAddingRoom, setIsAddingRoom] = useState(false);
 
   const handleAddRoom = (room: Room) => {
@@ -39,11 +39,10 @@ const App: React.FC = () => {
   return (
     <Box
       sx={{
-       
         padding: '20px',
         display: 'flex',
         flexDirection: 'column',
-        alignItems: 'center'
+        alignItems: 'center',
       }}
     >
       <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}>
@@ -68,8 +67,13 @@ const App: React.FC = () => {
         {/* Show RoomForm and RoomEditor when adding or editing a room */}
         {(isAddingRoom || editingRoom) && (
           <Box width="100%" maxWidth="1200px" mx="auto">
-            <RoomForm room={editingRoom} onAddRoom={handleAddRoom} isEditMode={editingRoom !== null} setEditingRoom={handleBackToRoomList} />
-            <RoomEditor room={editingRoom || []} />
+            <RoomForm
+              room={editingRoom}
+              onAddRoom={handleAddRoom}
+              isEditMode={editingRoom !== null}
+              setEditingRoom={handleBackToRoomList}
+            />
+            {editingRoom && <RoomEditor room={editingRoom} />} {/* Only render RoomEditor if editingRoom is not null */}
           </Box>
         )}
       </Box>

@@ -1,5 +1,5 @@
 export interface Door {
-  direction: 'left' | 'right' | 'top' | 'bottom';
+  direction: string;
   width: number;
   position: number;
 }

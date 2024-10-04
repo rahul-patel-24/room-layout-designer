@@ -7,7 +7,7 @@ interface RackProps {
   frontSideDirection?:string
 }
 
-const Rack: React.FC<RackProps> = ({ width = 100, height = 50, frontSideDirection = 'north' }) => {
+const Rack: React.FC<RackProps> = ({ width = 100, height = 50 }) => {
   return (
     <Box
       width={width}

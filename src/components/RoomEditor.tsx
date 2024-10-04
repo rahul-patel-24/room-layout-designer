@@ -5,7 +5,7 @@ import Rack from './Rack';
 import { Room } from '../types.ts';
 
 interface RoomEditorProps {
-  room: Room | null | [];
+  room: Room;
 }
 
 const RoomEditor: React.FC<RoomEditorProps> = ({ room }) => {
