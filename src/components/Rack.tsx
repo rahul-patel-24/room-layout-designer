@@ -1,11 +1,6 @@
 import React from 'react';
 import { Box } from '@mui/material';
-
-interface RackProps {
-  width?: number;
-  height?: number;
-  frontSideDirection?:string
-}
+import { Rack as RackProps } from '../types.ts';
 
 const Rack: React.FC<RackProps> = ({ width = 100, height = 50 }) => {
   return (
