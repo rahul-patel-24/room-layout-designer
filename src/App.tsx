@@ -9,8 +9,10 @@ import RoomEditor from './components/RoomEditor';
 const App: React.FC = () => {
   const typedRoomsData: Room[] = roomsData;
   const [rooms, setRooms] = useState<Room[]>(typedRoomsData);
-  const [editingRoom, setEditingRoom] = useState<Room | null>(null); // Changed to null
+  const [editingRoom, setEditingRoom] = useState<Room | null>(null);
   const [isAddingRoom, setIsAddingRoom] = useState(false);
+  const [width, setWidth] = useState(0); // Track width here
+  const [height, setHeight] = useState(0); // Track height here
 
   const handleAddRoom = (room: Room) => {
     setRooms((prevRooms) => {
@@ -28,12 +30,16 @@ const App: React.FC = () => {
 
   const handleEditRoom = (room: Room) => {
     setEditingRoom(room);
+    setWidth(room.width); // Set width when editing
+    setHeight(room.height); // Set height when editing
     setIsAddingRoom(false); // Close adding room if it's open
   };
 
   const handleBackToRoomList = () => {
     setIsAddingRoom(false);
     setEditingRoom(null); // Clear editing state
+    setWidth(0); // Reset width
+    setHeight(0); // Reset height
   };
 
   return (
@@ -56,6 +62,8 @@ const App: React.FC = () => {
               onClick={() => {
                 setIsAddingRoom(true);
                 setEditingRoom(null); // Ensure editing is cleared
+                setWidth(0); // Reset width
+                setHeight(0); // Reset height
               }}
             >
               New Room
@@ -72,8 +80,12 @@ const App: React.FC = () => {
               onAddRoom={handleAddRoom}
               isEditMode={editingRoom !== null}
               setEditingRoom={handleBackToRoomList}
+              setWidth={setWidth} // Pass setWidth function
+              setHeight={setHeight} // Pass setHeight function
+              width={width} // Pass current width
+              height={height} // Pass current height
             />
-            {editingRoom && <RoomEditor room={editingRoom} />} {/* Only render RoomEditor if editingRoom is not null */}
+            {editingRoom && <RoomEditor room={{ ...editingRoom, width, height }} />} {/* Pass updated dimensions */}
           </Box>
         )}
       </Box>

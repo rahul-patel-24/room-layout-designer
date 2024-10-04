@@ -7,13 +7,18 @@ interface RoomFormProps {
   onAddRoom: (room: Room) => void;
   isEditMode: boolean; // Flag to indicate edit mode
   setEditingRoom: (room: null) => void;
+  setWidth: (width: number) => void; // New prop for setting width
+  setHeight: (height: number) => void; // New prop for setting height
+  width: number; // Current width
+  height: number; // Current height
 }
 
-const RoomForm: React.FC<RoomFormProps> = ({ room, onAddRoom, isEditMode, setEditingRoom }) => {
+const MAX_WIDTH = 1000; // Set maximum width
+const MAX_HEIGHT = 1000; // Set maximum height
+
+const RoomForm: React.FC<RoomFormProps> = ({ room, onAddRoom, isEditMode, setEditingRoom, setWidth, setHeight, width, height }) => {
   const [name, setName] = useState('');
   const [address, setAddress] = useState('');
-  const [width, setWidth] = useState(0);
-  const [height, setHeight] = useState(0);
 
   // Effect to populate form fields when editing a room
   useEffect(() => {
@@ -33,7 +38,7 @@ const RoomForm: React.FC<RoomFormProps> = ({ room, onAddRoom, isEditMode, setEdi
 
   const handleSubmit = () => {
     const newRoom: Room = {
-      id: room ? room.id : Date.now(), // Use existing id if editing
+      id: room ? room.id : Date.now(),
       name,
       address,
       width,
@@ -77,7 +82,10 @@ const RoomForm: React.FC<RoomFormProps> = ({ room, onAddRoom, isEditMode, setEdi
         label="Width" 
         type="number" 
         value={width} 
-        onChange={(e) => setWidth(Number(e.target.value))} 
+        onChange={(e) => {
+          const value = Math.max(0, Math.min(Number(e.target.value), MAX_WIDTH)); // Limit the width
+          setWidth(value);
+        }} 
         fullWidth 
       />
       <TextField 
@@ -85,7 +93,10 @@ const RoomForm: React.FC<RoomFormProps> = ({ room, onAddRoom, isEditMode, setEdi
         label="Height" 
         type="number" 
         value={height} 
-        onChange={(e) => setHeight(Number(e.target.value))} 
+        onChange={(e) => {
+          const value = Math.max(0, Math.min(Number(e.target.value), MAX_HEIGHT)); // Limit the height
+          setHeight(value);
+        }} 
         fullWidth 
       />
       <Box 
@@ -93,7 +104,7 @@ const RoomForm: React.FC<RoomFormProps> = ({ room, onAddRoom, isEditMode, setEdi
           display: 'flex', 
           gap: 1, 
           flexDirection: { xs: 'column', sm: 'row' }, // Stack buttons vertically on small screens
-          width: '100%', // Ensure buttons take full width
+          width: '100%', 
         }}
       >
         <Button 
