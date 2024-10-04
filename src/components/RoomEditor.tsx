@@ -1,8 +1,8 @@
 import React from 'react';
 import { Box, Typography, Paper } from '@mui/material';
 import RoomPreview from './RoomPreview';
-import Rack from './Rack';
 import { Room } from '../types.ts';
+import RackStore from './RackStore.tsx';
 
 interface RoomEditorProps {
   room: Room;
@@ -12,7 +12,6 @@ const RoomEditor: React.FC<RoomEditorProps> = ({ room }) => {
   return (
     <Paper elevation={3} style={{ padding: '20px', margin: '20px 0' }}>
       <Box display="flex" justifyContent="center" flexDirection={{ xs: 'column', md: 'row' }} gap={10} width="100%">
-        
         {/* Sidebar with Instructions and Racks */}
         <Box width={{ xs: '100%', md: '20%' }} display="flex" flexDirection="column" gap={2}>
           <Typography variant="h6" color="textPrimary" gutterBottom>
@@ -32,9 +31,9 @@ const RoomEditor: React.FC<RoomEditorProps> = ({ room }) => {
 
           {/* Rack Elements */}
           <Box display="flex" flexDirection="column" gap={2}>
-            <Rack width={120} height={75} id={''} x={0} y={0} frontSideDirection={''} /> {/* Front side */}
-            <Rack width={120} height={100} id={''} x={0} y={0} frontSideDirection={''} /> {/* Back side */}
-            <Rack id={''} width={150} height={120} x={0} y={0} frontSideDirection={''} /> {/* Uses default values, can be either front or back */}
+            <RackStore width={120} height={75} id={''} x={0} y={0} frontSideDirection={''} /> {/* Front side */}
+            <RackStore width={120} height={100} id={''} x={0} y={0} frontSideDirection={''} /> {/* Back side */}
+            <RackStore id={''} width={150} height={120} x={0} y={0} frontSideDirection={''} /> {/* Uses default values, can be either front or back */}
           </Box>
         </Box>
 
@@ -44,29 +43,29 @@ const RoomEditor: React.FC<RoomEditorProps> = ({ room }) => {
           <RoomPreview room={room} />
         </Box>
 
-         {/* Direction Symbols (Top-Right Corner) */}
-         <Box
-            sx={{
-              position: 'absolute',
-              top: 150,
-              right: 150,
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              gap: '5px',
-              padding: '10px',
-              backgroundColor: 'aliceblue',
-              borderRadius: '5px',
-              boxShadow: '0 2px 5px rgba(0,0,0,0.2)',
-            }}
-          >
-            <Typography sx={{ fontWeight: 'bold' }}>N</Typography>
-            <Box display="flex" gap="10px">
-              <Typography sx={{ fontWeight: 'bold' }}>W</Typography>
-              <Typography sx={{ fontWeight: 'bold' }}>E</Typography>
-            </Box>
-            <Typography sx={{ fontWeight: 'bold' }}>S</Typography>
+        {/* Direction Symbols (Top-Right Corner) */}
+        <Box
+          sx={{
+            position: 'absolute',
+            top: 150,
+            right: 150,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: '5px',
+            padding: '10px',
+            backgroundColor: 'aliceblue',
+            borderRadius: '5px',
+            boxShadow: '0 2px 5px rgba(0,0,0,0.2)',
+          }}
+        >
+          <Typography sx={{ fontWeight: 'bold' }}>N</Typography>
+          <Box display="flex" gap="10px">
+            <Typography sx={{ fontWeight: 'bold' }}>W</Typography>
+            <Typography sx={{ fontWeight: 'bold' }}>E</Typography>
           </Box>
+          <Typography sx={{ fontWeight: 'bold' }}>S</Typography>
+        </Box>
       </Box>
     </Paper>
   );
