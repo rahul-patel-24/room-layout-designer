@@ -1,4 +1,4 @@
-export interface Door {
+export interface DoorProps {
   direction: string;
   width: number;
   position: number;
@@ -8,7 +8,7 @@ export interface Room {
   id: number;
   width: number;
   height: number;
-  door: Door; // Change this line to use the Door interface
+  door: DoorProps; // Change this line to use the Door interface
   name: string;
   address: string;
   racks: Rack[];
