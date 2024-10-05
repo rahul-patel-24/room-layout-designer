@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import RoomList from './components/RoomList';
 import RoomForm from './components/RoomForm';
-import { Room } from './types';
+import { DoorProps, Room } from './types';
 import { Button, Box } from '@mui/material';
 import roomsData from './data/rooms.json';
 import RoomEditor from './components/RoomEditor';
@@ -9,10 +9,24 @@ import RoomEditor from './components/RoomEditor';
 const App: React.FC = () => {
   const typedRoomsData: Room[] = roomsData;
   const [rooms, setRooms] = useState<Room[]>(typedRoomsData);
-  const [editingRoom, setEditingRoom] = useState<Room | null>(null);
+  const [door, setDoor] = useState<DoorProps>({
+    direction: 'left',
+    width: 50,
+    position: 50,
+  })
+  const [editingRoom, setEditingRoom] = useState<Room | null>({
+    id: Date.now(),
+    width: 500,
+    height: 500,
+    door: door,// Change this line to use the Door interface
+    name: 'new room',
+    address: '',
+    racks: [],
+  });
   const [isAddingRoom, setIsAddingRoom] = useState(false);
   const [width, setWidth] = useState(0); // Track width here
   const [height, setHeight] = useState(0); // Track height here
+
 
   const handleAddRoom = (room: Room) => {
     setRooms((prevRooms) => {
@@ -33,6 +47,7 @@ const App: React.FC = () => {
     setWidth(room.width); // Set width when editing
     setHeight(room.height); // Set height when editing
     setIsAddingRoom(false); // Close adding room if it's open
+    setDoor(room.door)
   };
 
   const handleBackToRoomList = () => {
@@ -82,10 +97,12 @@ const App: React.FC = () => {
               setEditingRoom={handleBackToRoomList}
               setWidth={setWidth} // Pass setWidth function
               setHeight={setHeight} // Pass setHeight function
+              setDoor={setDoor}
+              door={door}
               width={width} // Pass current width
               height={height} // Pass current height
             />
-            {editingRoom && <RoomEditor room={{ ...editingRoom, width, height }} />} {/* Pass updated dimensions */}
+            {<RoomEditor room={{ ...editingRoom, width, height,door }} />} {/* Pass updated dimensions */}
           </Box>
         )}
       </Box>

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Button, TextField, Box } from '@mui/material';
-import { Room } from '../types';
+import { DoorProps, Room } from '../types';
 
 interface RoomFormProps {
   room: Room | null; // Accept null for a new room
@@ -9,6 +9,8 @@ interface RoomFormProps {
   setEditingRoom: (room: null) => void;
   setWidth: (width: number) => void; // New prop for setting width
   setHeight: (height: number) => void; // New prop for setting height
+  setDoor: (door: DoorProps) => void,
+  door: DoorProps,
   width: number; // Current width
   height: number; // Current height
 }
@@ -16,9 +18,17 @@ interface RoomFormProps {
 const MAX_WIDTH = 1000; // Set maximum width
 const MAX_HEIGHT = 1000; // Set maximum height
 
-const RoomForm: React.FC<RoomFormProps> = ({ room, onAddRoom, isEditMode, setEditingRoom, setWidth, setHeight, width, height }) => {
+const RoomForm: React.FC<RoomFormProps> = ({ room, onAddRoom, isEditMode, setEditingRoom, setWidth, setHeight, setDoor, door, width, height }) => {
   const [name, setName] = useState('');
   const [address, setAddress] = useState('');
+
+  const handleDoorChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = event.target;
+    setDoor((prev: DoorProps) => ({
+      ...prev,
+      [name]: name === 'width' || name === 'position' ? Number(value) : value,
+    }));
+  };
 
   // Effect to populate form fields when editing a room
   useEffect(() => {
@@ -54,73 +64,109 @@ const RoomForm: React.FC<RoomFormProps> = ({ room, onAddRoom, isEditMode, setEdi
   };
 
   return (
-    <Box 
-      sx={{ 
-        width: '100%', 
-        margin: '20px 0', 
-        display: 'flex', 
+    <Box
+      sx={{
+        width: '100%',
+        margin: '20px 0',
+        display: 'flex',
         flexDirection: { xs: 'column', sm: 'row' }, // Stack vertically on small screens
-        gap: 2 
+        gap: 2
       }}
     >
-      <TextField 
-        size="small" 
-        label="Name" 
-        value={name} 
-        onChange={(e) => setName(e.target.value)} 
-        fullWidth 
+      <TextField
+        size="small"
+        label="Name"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+        fullWidth
       />
-      <TextField 
-        size="small" 
-        label="Address" 
-        value={address} 
-        onChange={(e) => setAddress(e.target.value)} 
-        fullWidth 
+      <TextField
+        size="small"
+        label="Address"
+        value={address}
+        onChange={(e) => setAddress(e.target.value)}
+        fullWidth
       />
-      <TextField 
-        size="small" 
-        label="Width" 
-        type="number" 
-        value={width} 
+      <TextField
+        size="small"
+        label="Width"
+        type="number"
+        value={width}
         onChange={(e) => {
           const value = Math.max(0, Math.min(Number(e.target.value), MAX_WIDTH)); // Limit the width
           setWidth(value);
-        }} 
-        fullWidth 
+        }}
+        fullWidth
       />
-      <TextField 
-        size="small" 
-        label="Height" 
-        type="number" 
-        value={height} 
+      <TextField
+        size="small"
+        label="Height"
+        type="number"
+        value={height}
         onChange={(e) => {
           const value = Math.max(0, Math.min(Number(e.target.value), MAX_HEIGHT)); // Limit the height
           setHeight(value);
-        }} 
-        fullWidth 
+        }}
+        fullWidth
       />
-      <Box 
-        sx={{ 
-          display: 'flex', 
-          gap: 1, 
+      <TextField
+        size="small"
+        label="Door Width"
+        name="width"
+        type="number"
+        value={door?.width}
+        onChange={handleDoorChange}
+        fullWidth
+        margin="normal"
+      />
+      <TextField
+        size="small"
+        label="Direction"
+        name="direction"
+        select
+        value={door?.direction}
+        onChange={handleDoorChange}
+        fullWidth
+        margin="normal"
+        SelectProps={{ native: true }}
+      >
+        <option value="left">Left</option>
+        <option value="right">Right</option>
+        <option value="top">Top</option>
+        <option value="bottom">Bottom</option>
+      </TextField>
+      <TextField
+        size="small"
+        label="Position"
+        name="position"
+        type="number"
+        value={door?.position}
+        onChange={handleDoorChange}
+        fullWidth
+        margin="normal"
+      />
+      <Box
+        sx={{
+          display: 'flex',
+          gap: 1,
           flexDirection: { xs: 'column', sm: 'row' }, // Stack buttons vertically on small screens
-          width: '100%', 
+          width: '100%',
         }}
       >
-        <Button 
-          size="small" 
-          variant="contained" 
-          color="primary" 
-          onClick={handleSubmit} 
+        <Button
+          size="small"
+          variant="contained"
+          color="primary"
+          onClick={handleSubmit}
           fullWidth
         >
           {isEditMode ? 'Update' : 'Add'}
         </Button>
-        <Button 
-          size="small" 
-          variant="outlined" 
-          color="secondary" 
-          onClick={() => setEditingRoom(null)} 
+        <Button
+          size="small"
+          variant="outlined"
+          color="secondary"
+          onClick={() => setEditingRoom(null)}
           fullWidth
         >
           Back

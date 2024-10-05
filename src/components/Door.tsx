@@ -1,4 +1,3 @@
-// Door.tsx
 import React from 'react';
 import { Box } from '@mui/material';
 import { DoorProps } from '../types.ts';
@@ -12,12 +11,13 @@ const Door: React.FC<DoorProps> = ({ width, direction, position }) => {
     borderRadius: '1px',
     boxShadow: '0 2px 5px rgba(0,0,0,0.2)',
     ...(direction === 'left' && {
-      left: 0,
-      top: `calc(50% - ${width / 2}px)`,
+      top: `${position}px`, // Position from the left edge
+      left:0
+      // top: `calc(50% - ${width / 2}px)`, // Center vertically
     }),
     ...(direction === 'right' && {
-      right: 0,
-      top: `calc(50% - ${width / 2}px)`,
+      right:0, // Calculate right position
+      top: `${position}px`, // Center vertically
     }),
     ...(direction === 'top' && {
       top: -30,

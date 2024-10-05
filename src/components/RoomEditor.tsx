@@ -31,9 +31,9 @@ const RoomEditor: React.FC<RoomEditorProps> = ({ room }) => {
 
           {/* Rack Elements */}
           <Box display="flex" flexDirection="column" gap={2}>
-            <RackStore width={120} height={75} id={''} x={0} y={0} frontSideDirection={''} /> {/* Front side */}
-            <RackStore width={120} height={100} id={''} x={0} y={0} frontSideDirection={''} /> {/* Back side */}
-            <RackStore id={''} width={150} height={120} x={0} y={0} frontSideDirection={''} /> {/* Uses default values, can be either front or back */}
+            <RackStore width={120} height={75} id={''} x={0} y={0} frontSideDirection={''} />
+            <RackStore width={120} height={100} id={''} x={0} y={0} frontSideDirection={''} />
+            <RackStore id={''} width={150} height={120} x={0} y={0} frontSideDirection={''} />
           </Box>
         </Box>
 
