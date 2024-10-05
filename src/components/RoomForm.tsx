@@ -78,7 +78,8 @@ const RoomForm: React.FC<RoomFormProps> = ({ room, onAddRoom, isEditMode, setEdi
         sx={{
           display: 'flex',
           gap: 2,
-          width: '100%'
+          width: '100%',
+          flexDirection: { xs: 'column', sm: 'row' },
         }}
       >
         <TextField
@@ -97,7 +98,7 @@ const RoomForm: React.FC<RoomFormProps> = ({ room, onAddRoom, isEditMode, setEdi
         />
         <TextField
           size="small"
-          label="Width"
+          label="Room Width"
           type="number"
           value={width}
           onChange={(e) => {
@@ -108,7 +109,7 @@ const RoomForm: React.FC<RoomFormProps> = ({ room, onAddRoom, isEditMode, setEdi
         />
         <TextField
           size="small"
-          label="Height"
+          label="Room Height"
           type="number"
           value={height}
           onChange={(e) => {
@@ -124,7 +125,8 @@ const RoomForm: React.FC<RoomFormProps> = ({ room, onAddRoom, isEditMode, setEdi
         sx={{
           display: 'flex',
           gap: 2,
-          width: '100%'
+          width: '100%',
+          flexDirection: { xs: 'column', sm: 'row' },
         }}
       >
         <TextField
