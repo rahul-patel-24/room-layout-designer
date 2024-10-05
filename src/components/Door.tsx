@@ -6,28 +6,33 @@ const Door: React.FC<DoorProps> = ({ width, direction, position }) => {
   const doorStyles = {
     position: 'absolute',
     backgroundColor: 'saddlebrown',
-    height: width + 20,
-    width: '10px',
     borderRadius: '1px',
     boxShadow: '0 2px 5px rgba(0,0,0,0.2)',
     ...(direction === 'left' && {
-      top: `${position}px`, // Position from the left edge
-      left:0
-      // top: `calc(50% - ${width / 2}px)`, // Center vertically
+      top: `${position}px`,
+      left: 0,
+      width: '10px',
+      height: `${width + 20}px`,
     }),
     ...(direction === 'right' && {
-      right:0, // Calculate right position
-      top: `${position}px`, // Center vertically
+      top: `${position}px`,
+      right: 0,
+      width: '10px',
+      height: `${width + 20}px`,
     }),
     ...(direction === 'top' && {
-      top: -30,
-      left: position,
-      transform: 'rotate(90deg)',
+      top: 0, // Positioned at the top wall
+      left: `${position}px`,
+      width: `${width + 20}px`, // Set the width horizontally for top
+      height: '10px', // Small height since it's a horizontal door
+      transform: 'none', // No need for rotation
     }),
     ...(direction === 'bottom' && {
-      bottom: -30,
-      left: position,
-      transform: 'rotate(270deg)',
+      bottom: 0, // Positioned at the bottom wall
+      left: `${position}px`,
+      width: `${width + 20}px`, // Set the width horizontally for bottom
+      height: '10px', // Small height since it's a horizontal door
+      transform: 'none', // No need for rotation
     }),
   };
 

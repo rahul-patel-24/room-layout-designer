@@ -83,7 +83,7 @@ const App: React.FC = () => {
         {(isAddingRoom || editingRoom) && (
           <Box width="100%" maxWidth="1200px" mx="auto">
             <RoomForm
-              room={editingRoom}
+              room={editingRoom ?? null}
               onAddRoom={handleAddRoom}
               isEditMode={editingRoom !== null}
               setEditingRoom={handleBackToRoomList}
@@ -94,7 +94,10 @@ const App: React.FC = () => {
               width={width} // Pass current width
               height={height} // Pass current height
             />
-            {<RoomEditor room={{ ...editingRoom, width, height,door }} />} {/* Pass updated dimensions */}
+            {/* Ensure that editingRoom is not null before passing it to RoomEditor */}
+            {editingRoom && (
+              <RoomEditor room={{ ...editingRoom, width, height, door }} />
+            )}
           </Box>
         )}
       </Box>
