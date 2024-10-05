@@ -14,15 +14,7 @@ const App: React.FC = () => {
     width: 50,
     position: 50,
   })
-  const [editingRoom, setEditingRoom] = useState<Room | null>({
-    id: Date.now(),
-    width: 500,
-    height: 500,
-    door: door,// Change this line to use the Door interface
-    name: 'new room',
-    address: '',
-    racks: [],
-  });
+  const [editingRoom, setEditingRoom] = useState<Room | null>();
   const [isAddingRoom, setIsAddingRoom] = useState(false);
   const [width, setWidth] = useState(0); // Track width here
   const [height, setHeight] = useState(0); // Track height here
