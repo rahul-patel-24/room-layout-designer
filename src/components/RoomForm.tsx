@@ -24,11 +24,17 @@ const RoomForm: React.FC<RoomFormProps> = ({ room, onAddRoom, isEditMode, setEdi
 
   const handleDoorChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = event.target;
-    setDoor((prev: DoorProps) => ({
-      ...prev,
-      [name]: name === 'width' || name === 'position' ? Number(value) : value,
-    }));
+    const newValue = name === 'width' || name === 'position' ? Number(value) : value;
+    
+    // Create the updated door object
+    const updatedDoor: DoorProps = {
+      ...door,
+      [name]: newValue,
+    };
+  
+    setDoor(updatedDoor);
   };
+  
 
   useEffect(() => {
     if (room) {
