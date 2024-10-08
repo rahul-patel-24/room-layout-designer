@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import RoomList from './components/RoomList';
 import RoomForm from './components/RoomForm';
 import { DoorProps, Room } from './types';
@@ -7,46 +7,57 @@ import roomsData from './data/rooms.json';
 import RoomEditor from './components/RoomEditor';
 
 const App: React.FC = () => {
-  const typedRoomsData: Room[] = roomsData;
-  const [rooms, setRooms] = useState<Room[]>(typedRoomsData);
+  const [rooms, setRooms] = useState<Room[]>([]);
   const [door, setDoor] = useState<DoorProps>({
     direction: 'left',
     width: 50,
     position: 50,
-  })
-  const [editingRoom, setEditingRoom] = useState<Room | null>();
+  });
+  const [editingRoom, setEditingRoom] = useState<Room | null>(null);
   const [isAddingRoom, setIsAddingRoom] = useState(false);
-  const [width, setWidth] = useState(0); // Track width here
-  const [height, setHeight] = useState(0); // Track height here
+  const [width, setWidth] = useState(0);
+  const [height, setHeight] = useState(0);
 
+  // Load data from localStorage or JSON file on initial render
+  useEffect(() => {
+    const savedRooms = localStorage.getItem('rooms');
+    if (savedRooms) {
+      setRooms(JSON.parse(savedRooms));
+    } else {
+      setRooms(roomsData);
+      localStorage.setItem('rooms', JSON.stringify(roomsData));
+    }
+  }, []);
+
+  const updateLocalStorage = (updatedRooms: Room[]) => {
+    localStorage.setItem('rooms', JSON.stringify(updatedRooms));
+  };
 
   const handleAddRoom = (room: Room) => {
     setRooms((prevRooms) => {
-      if (editingRoom) {
-        // Update existing room
-        return prevRooms.map((r) => (r.id === room.id ? room : r));
-      } else {
-        // Add new room
-        return [...prevRooms, room];
-      }
+      const newRooms = editingRoom
+        ? prevRooms.map((r) => (r.id === room.id ? room : r))
+        : [...prevRooms, room];
+      updateLocalStorage(newRooms); // Update local storage
+      return newRooms;
     });
     setIsAddingRoom(false);
-    setEditingRoom(null); // Clear editing state
+    setEditingRoom(null);
   };
 
   const handleEditRoom = (room: Room) => {
     setEditingRoom(room);
-    setWidth(room.width); // Set width when editing
-    setHeight(room.height); // Set height when editing
-    setIsAddingRoom(false); // Close adding room if it's open
-    setDoor(room.door)
+    setWidth(room.width);
+    setHeight(room.height);
+    setIsAddingRoom(false);
+    setDoor(room.door);
   };
 
   const handleBackToRoomList = () => {
     setIsAddingRoom(false);
-    setEditingRoom(null); // Clear editing state
-    setWidth(0); // Reset width
-    setHeight(0); // Reset height
+    setEditingRoom(null);
+    setWidth(0);
+    setHeight(0);
   };
 
   return (
@@ -59,7 +70,6 @@ const App: React.FC = () => {
       }}
     >
       <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}>
-        {/* Show RoomList only when not adding or editing a room */}
         {!isAddingRoom && !editingRoom && (
           <Box>
             <Button
@@ -68,9 +78,9 @@ const App: React.FC = () => {
               sx={{ marginBottom: '10px' }}
               onClick={() => {
                 setIsAddingRoom(true);
-                setEditingRoom(null); // Ensure editing is cleared
-                setWidth(0); // Reset width
-                setHeight(0); // Reset height
+                setEditingRoom(null);
+                setWidth(0);
+                setHeight(0);
               }}
             >
               New Room
@@ -79,7 +89,6 @@ const App: React.FC = () => {
           </Box>
         )}
 
-        {/* Show RoomForm and RoomEditor when adding or editing a room */}
         {(isAddingRoom || editingRoom) && (
           <Box width="100%" maxWidth="1200px" mx="auto">
             <RoomForm
@@ -87,14 +96,13 @@ const App: React.FC = () => {
               onAddRoom={handleAddRoom}
               isEditMode={editingRoom !== null}
               setEditingRoom={handleBackToRoomList}
-              setWidth={setWidth} // Pass setWidth function
-              setHeight={setHeight} // Pass setHeight function
+              setWidth={setWidth}
+              setHeight={setHeight}
               setDoor={setDoor}
               door={door}
-              width={width} // Pass current width
-              height={height} // Pass current height
+              width={width}
+              height={height}
             />
-            {/* Ensure that editingRoom is not null before passing it to RoomEditor */}
             {editingRoom && (
               <RoomEditor room={{ ...editingRoom, width, height, door }} />
             )}
