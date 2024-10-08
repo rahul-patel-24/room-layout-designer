@@ -1,13 +1,19 @@
-import React from 'react';
-import { Box } from '@mui/material';
+import React, { useState } from 'react';
+import { Box, IconButton } from '@mui/material';
 import { Rack as RackType } from '../types.ts';
+import { faSyncAlt, faTrash } from '@fortawesome/free-solid-svg-icons'; // Import Font Awesome icons
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'; // FontAwesome Component
 
 interface RackProps extends RackType {
-  roomWidth: number; // Total room width for size calculation
-  roomHeight: number; // Total room height for size calculation
+  roomWidth: number;
+  roomHeight: number;
+  onRotate: (id: string) => void;
+  onDelete: (id: string) => void;
 }
 
-const Rack: React.FC<RackProps> = ({ width, height, x, y, frontSideDirection, id, roomWidth, roomHeight }) => {
+const Rack: React.FC<RackProps> = ({ width, height, x, y, frontSideDirection, id, roomWidth, roomHeight, onRotate, onDelete }) => {
+  const [hovered, setHovered] = useState(false); // State to track hover
+
   const calculateRackSize = (rackWidth: number, rackHeight: number) => ({
     width: (rackWidth / roomWidth) * 100,
     height: (rackHeight / roomHeight) * 100,
@@ -64,9 +70,33 @@ const Rack: React.FC<RackProps> = ({ width, height, x, y, frontSideDirection, id
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
+        transition: 'transform 0.3s ease',
+        '&:hover': { transform: 'scale(1.05)' }, // Slight zoom on hover
       }}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
     >
       Rack {height} * {width}
+
+      {/* Rotate and Delete Icons */}
+      {hovered && (
+        <Box
+          sx={{
+            position: 'absolute',
+            top: 0,
+            right: 0,
+            display: 'flex',
+            gap: '5px',
+          }}
+        >
+          <IconButton onClick={() => onRotate(id)} size="small">
+            <FontAwesomeIcon icon={faSyncAlt} />
+          </IconButton>
+          <IconButton onClick={() => onDelete(id)} size="small">
+            <FontAwesomeIcon icon={faTrash} />
+          </IconButton>
+        </Box>
+      )}
     </Box>
   );
 };

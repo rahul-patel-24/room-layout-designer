@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Box, Typography, Paper } from '@mui/material';
 import RoomPreview from './RoomPreview';
 import { Room } from '../types.ts';
@@ -6,13 +6,59 @@ import RackStore from './RackStore.tsx';
 
 interface RoomEditorProps {
   room: Room;
+  onRoomUpdate: (updatedRoom: Room) => void;
 }
 
-const RoomEditor: React.FC<RoomEditorProps> = ({ room }) => {
+const RoomEditor: React.FC<RoomEditorProps> = ({ room, onRoomUpdate }) => {
+  const [updatedRoom, setUpdatedRoom] = useState(room);
+
+  const handleRackRotate = (rackId: string) => {
+    setUpdatedRoom((prevRoom) => {
+      const updatedRacks = prevRoom.racks.map((rack) => {
+        if (rack.id === rackId) {
+          const nextDirection = getNextDirection(rack.frontSideDirection);
+          const { width, height } = getDimensionsByDirection(rack.width, rack.height);
+
+          return {
+            ...rack,
+            width,
+            height,
+            frontSideDirection: nextDirection,
+          };
+        }
+        return rack;
+      });
+
+      // Update the room state with the new racks
+      const newRoom = { ...prevRoom, racks: updatedRacks };
+      onRoomUpdate(newRoom); // Call the update function to propagate changes
+      return newRoom;
+    });
+  };
+
+  const handleRackDelete = (rackId: string) => {
+    setUpdatedRoom((prevRoom) => {
+      const updatedRacks = prevRoom.racks.filter((rack) => rack.id !== rackId);
+
+      const newRoom = { ...prevRoom, racks: updatedRacks };
+      onRoomUpdate(newRoom); // Call the update function to propagate changes
+      return newRoom;
+    });
+  };
+
+  const getDimensionsByDirection = (originalWidth: number, originalHeight: number) => {
+    return { width: originalHeight, height: originalWidth };
+  };
+
+  const getNextDirection = (currentDirection: string) => {
+    const directions = ['north', 'east', 'south', 'west'];
+    const currentIndex = directions.indexOf(currentDirection);
+    return directions[(currentIndex + 1) % directions.length];
+  };
+
   return (
     <Paper elevation={3} style={{ padding: '20px', margin: '20px 0' }}>
       <Box display="flex" justifyContent="center" flexDirection={{ xs: 'column', md: 'row' }} gap={10} width="100%">
-        {/* Sidebar with Instructions and Racks */}
         <Box width={{ xs: '100%', md: '20%' }} display="flex" flexDirection="column" gap={2}>
           <Typography variant="h6" color="textPrimary" gutterBottom>
             Instructions
@@ -29,42 +75,15 @@ const RoomEditor: React.FC<RoomEditorProps> = ({ room }) => {
             </ul>
           </Box>
 
-          {/* Rack Elements */}
           <Box display="flex" flexDirection="column" gap={2}>
-            <RackStore width={120} height={75} id={''} x={0} y={0} frontSideDirection={''} />
-            <RackStore width={120} height={100} id={''} x={0} y={0} frontSideDirection={''} />
-            <RackStore id={''} width={150} height={120} x={0} y={0} frontSideDirection={''} />
+            <RackStore width={120} height={75} id="rack1" x={0} y={0} frontSideDirection="north" />
+            <RackStore width={120} height={100} id="rack2" x={0} y={0} frontSideDirection="north" />
+            <RackStore id="rack3" width={150} height={120} x={0} y={0} frontSideDirection="north" />
           </Box>
         </Box>
 
-        {/* Room Preview */}
         <Box display="flex" justifyContent="center" alignItems="center" width={{ xs: '100%', md: '80%' }} position="relative">
-          {/* Room Preview */}
-          <RoomPreview room={room} />
-        </Box>
-
-        {/* Direction Symbols (Top-Right Corner) */}
-        <Box
-          sx={{
-            position: 'absolute',
-            top: 150,
-            right: 150,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            gap: '5px',
-            padding: '10px',
-            backgroundColor: 'aliceblue',
-            borderRadius: '5px',
-            boxShadow: '0 2px 5px rgba(0,0,0,0.2)',
-          }}
-        >
-          <Typography sx={{ fontWeight: 'bold' }}>N</Typography>
-          <Box display="flex" gap="10px">
-            <Typography sx={{ fontWeight: 'bold' }}>W</Typography>
-            <Typography sx={{ fontWeight: 'bold' }}>E</Typography>
-          </Box>
-          <Typography sx={{ fontWeight: 'bold' }}>S</Typography>
+          <RoomPreview room={updatedRoom} onRackRotate={handleRackRotate} onRackDelete={handleRackDelete} />
         </Box>
       </Box>
     </Paper>

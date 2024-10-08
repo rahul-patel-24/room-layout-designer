@@ -41,8 +41,8 @@ const App: React.FC = () => {
       updateLocalStorage(newRooms); // Update local storage
       return newRooms;
     });
-    setIsAddingRoom(false);
-    setEditingRoom(null);
+    // setIsAddingRoom(false);
+    // setEditingRoom(null);
   };
 
   const handleEditRoom = (room: Room) => {
@@ -104,7 +104,7 @@ const App: React.FC = () => {
               height={height}
             />
             {editingRoom && (
-              <RoomEditor room={{ ...editingRoom, width, height, door }} />
+              <RoomEditor room={{ ...editingRoom, width, height, door }} onRoomUpdate={handleAddRoom} />
             )}
           </Box>
         )}
