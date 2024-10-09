@@ -2,7 +2,7 @@ import React from 'react';
 import { Box } from '@mui/material';
 import Door from './Door';
 import Rack from './Rack';
-import { Room } from '../types.ts';
+import { Room } from '../types';
 
 interface RoomPreviewProps {
   room: Room;
@@ -28,8 +28,10 @@ const RoomPreview: React.FC<RoomPreviewProps> = ({ room, onRackRotate, onRackDel
         overflow: 'hidden',
       }}
     >
+      {/* Render door if exists */}
       {door && <Door width={door.width} direction={door.direction} position={door.position} />}
 
+      {/* Render racks inside the room */}
       {room.racks?.map((rack) => (
         <Rack
           key={rack.id}

@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import RoomList from './components/RoomList';
 import RoomForm from './components/RoomForm';
-import { DoorProps, Room } from './types';
+import { DoorProps, Room, Rack } from './types'; // Ensure Rack type is imported
 import { Button, Box } from '@mui/material';
 import roomsData from './data/rooms.json';
 import RoomEditor from './components/RoomEditor';
+import { DndProvider } from 'react-dnd'; // Import DndProvider
+import { HTML5Backend } from 'react-dnd-html5-backend'; // Import backend for drag and drop
+import { v4 as uuidv4 } from 'uuid'; // For generating unique IDs
 
 const App: React.FC = () => {
   const [rooms, setRooms] = useState<Room[]>([]);
@@ -41,8 +44,6 @@ const App: React.FC = () => {
       updateLocalStorage(newRooms); // Update local storage
       return newRooms;
     });
-    // setIsAddingRoom(false);
-    // setEditingRoom(null);
   };
 
   const handleEditRoom = (room: Room) => {
@@ -60,56 +61,87 @@ const App: React.FC = () => {
     setHeight(0);
   };
 
-  return (
-    <Box
-      sx={{
-        padding: '20px',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-      }}
-    >
-      <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}>
-        {!isAddingRoom && !editingRoom && (
-          <Box>
-            <Button
-              variant="contained"
-              color="primary"
-              sx={{ marginBottom: '10px' }}
-              onClick={() => {
-                setIsAddingRoom(true);
-                setEditingRoom(null);
-                setWidth(0);
-                setHeight(0);
-              }}
-            >
-              New Room
-            </Button>
-            <RoomList rooms={rooms} onEditRoom={handleEditRoom} />
-          </Box>
-        )}
+  // Handle the drop of a rack into the room
+  const handleRackDrop = (rackData: { width: number; height: number }, position: { x: number; y: number }) => {
+    if (editingRoom) {
+      const newRack: Rack = {
+        id: uuidv4(), // Generate a unique ID for the rack
+        width: rackData.width,
+        height: rackData.height,
+        x: position.x,
+        y: position.y,
+        frontSideDirection: 'north', // Default direction
+      };
 
-        {(isAddingRoom || editingRoom) && (
-          <Box width="100%" maxWidth="1200px" mx="auto">
-            <RoomForm
-              room={editingRoom ?? null}
-              onAddRoom={handleAddRoom}
-              isEditMode={editingRoom !== null}
-              setEditingRoom={handleBackToRoomList}
-              setWidth={setWidth}
-              setHeight={setHeight}
-              setDoor={setDoor}
-              door={door}
-              width={width}
-              height={height}
-            />
-            {editingRoom && (
-              <RoomEditor room={{ ...editingRoom, width, height, door }} onRoomUpdate={handleAddRoom} />
-            )}
-          </Box>
-        )}
+      console.log(newRack)
+
+      // Update the room with the new rack
+      const updatedRoom = {
+        ...editingRoom,
+        racks: [...editingRoom.racks, newRack],
+      };
+
+      // Save changes to the room
+      handleAddRoom(updatedRoom);
+    }
+  };
+
+  return (
+    <DndProvider backend={HTML5Backend}> {/* Wrap your app in DndProvider */}
+      <Box
+        sx={{
+          padding: '20px',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+        }}
+      >
+        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}>
+          {!isAddingRoom && !editingRoom && (
+            <Box>
+              <Button
+                variant="contained"
+                color="primary"
+                sx={{ marginBottom: '10px' }}
+                onClick={() => {
+                  setIsAddingRoom(true);
+                  setEditingRoom(null);
+                  setWidth(0);
+                  setHeight(0);
+                }}
+              >
+                New Room
+              </Button>
+              <RoomList rooms={rooms} onEditRoom={handleEditRoom} />
+            </Box>
+          )}
+
+          {(isAddingRoom || editingRoom) && (
+            <Box width="100%" maxWidth="1200px" mx="auto">
+              <RoomForm
+                room={editingRoom ?? null}
+                onAddRoom={handleAddRoom}
+                isEditMode={editingRoom !== null}
+                setEditingRoom={handleBackToRoomList}
+                setWidth={setWidth}
+                setHeight={setHeight}
+                setDoor={setDoor}
+                door={door}
+                width={width}
+                height={height}
+              />
+              {editingRoom && (
+                <RoomEditor
+                  room={{ ...editingRoom, width, height, door }}
+                  onRoomUpdate={handleAddRoom}
+                  onRackDrop={handleRackDrop} // Pass the handleRackDrop method to RoomEditor
+                />
+              )}
+            </Box>
+          )}
+        </Box>
       </Box>
-    </Box>
+    </DndProvider>
   );
 };
 

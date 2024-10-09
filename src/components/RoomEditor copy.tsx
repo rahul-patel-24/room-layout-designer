@@ -4,7 +4,6 @@ import RoomPreview from './RoomPreview';
 import RackStore from './RackStore';
 import { useDrop } from 'react-dnd';
 import { Room } from '../types';
-import { v4 as uuidv4 } from 'uuid';
 
 interface RoomEditorProps {
   room: Room;
@@ -28,14 +27,12 @@ const RoomEditor: React.FC<RoomEditorProps> = ({ room, onRoomUpdate }) => {
       const y = ((offset.y - dropArea.top) / dropArea.height) * updatedRoom.height;
 
       const newRack = {
+        id:uuid(),
+        frontsideDirection:'north',
         ...item, // data from the dragged rack
-        id: uuidv4(), // Generate a unique ID for each new rack
-        frontSideDirection: 'north', // Set default direction
         x,
         y,
       };
-
-      console.log(newRack);
 
       // Update room with the new rack
       const updatedRacks = [...updatedRoom.racks, newRack];
@@ -116,6 +113,8 @@ const RoomEditor: React.FC<RoomEditorProps> = ({ room, onRoomUpdate }) => {
           justifyContent="center"
           alignItems="center"
           width={{ xs: '100%', md: '80%' }}
+          // position="relative"
+          // border={isOver ? '2px solid blue' : '2px solid black'}
         >
           <RoomPreview room={updatedRoom} onRackRotate={handleRackRotate} onRackDelete={handleRackDelete} />
         </Box>
@@ -125,3 +124,7 @@ const RoomEditor: React.FC<RoomEditorProps> = ({ room, onRoomUpdate }) => {
 };
 
 export default RoomEditor;
+function uuid() {
+  throw new Error('Function not implemented.');
+}
+
