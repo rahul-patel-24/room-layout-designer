@@ -1,14 +1,7 @@
 import React from 'react';
 import { useDrag } from 'react-dnd';
 import { Box } from '@mui/material';
-
-
-interface RackStoreProps {
-  width: number;
-  height: number;
-  id: string;
-  frontSideDirection: string;
-}
+import {Rack as RackStoreProps} from '../types'
 
 const RackStore: React.FC<RackStoreProps> = ({ width, height, id, frontSideDirection }) => {
   const [{ isDragging }, dragRef] = useDrag({
