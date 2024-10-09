@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import RoomList from './components/RoomList';
 import RoomForm from './components/RoomForm';
-import { DoorProps, Room, Rack } from './types'; // Ensure Rack type is imported
+import { DoorProps, Room } from './types'; // Ensure Rack type is imported
 import { Button, Box } from '@mui/material';
 import roomsData from './data/rooms.json';
 import RoomEditor from './components/RoomEditor';
 import { DndProvider } from 'react-dnd'; // Import DndProvider
 import { HTML5Backend } from 'react-dnd-html5-backend'; // Import backend for drag and drop
-import { v4 as uuidv4 } from 'uuid'; // For generating unique IDs
 
 const App: React.FC = () => {
   const [rooms, setRooms] = useState<Room[]>([]);
@@ -61,31 +60,6 @@ const App: React.FC = () => {
     setHeight(0);
   };
 
-  // Handle the drop of a rack into the room
-  const handleRackDrop = (rackData: { width: number; height: number }, position: { x: number; y: number }) => {
-    if (editingRoom) {
-      const newRack: Rack = {
-        id: uuidv4(), // Generate a unique ID for the rack
-        width: rackData.width,
-        height: rackData.height,
-        x: position.x,
-        y: position.y,
-        frontSideDirection: 'north', // Default direction
-      };
-
-      console.log(newRack)
-
-      // Update the room with the new rack
-      const updatedRoom = {
-        ...editingRoom,
-        racks: [...editingRoom.racks, newRack],
-      };
-
-      // Save changes to the room
-      handleAddRoom(updatedRoom);
-    }
-  };
-
   return (
     <DndProvider backend={HTML5Backend}> {/* Wrap your app in DndProvider */}
       <Box
@@ -134,7 +108,6 @@ const App: React.FC = () => {
                 <RoomEditor
                   room={{ ...editingRoom, width, height, door }}
                   onRoomUpdate={handleAddRoom}
-                  onRackDrop={handleRackDrop} // Pass the handleRackDrop method to RoomEditor
                 />
               )}
             </Box>
