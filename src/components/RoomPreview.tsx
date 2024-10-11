@@ -8,9 +8,10 @@ interface RoomPreviewProps {
   room: Room;
   onRackRotate: (rackId: string) => void;
   onRackDelete: (rackId: string) => void;
+  onRackDragEnd: (rackId: string, newX: number, newY: number) => void; // New prop for updating rack position
 }
 
-const RoomPreview: React.FC<RoomPreviewProps> = ({ room, onRackRotate, onRackDelete }) => {
+const RoomPreview: React.FC<RoomPreviewProps> = ({ room, onRackRotate, onRackDelete, onRackDragEnd }) => {
   const { width, height, door } = room;
 
   return (
@@ -45,6 +46,7 @@ const RoomPreview: React.FC<RoomPreviewProps> = ({ room, onRackRotate, onRackDel
           roomHeight={height}
           onRotate={onRackRotate}
           onDelete={onRackDelete}
+          onDragEnd={onRackDragEnd} // Pass the onDragEnd prop
         />
       ))}
     </Box>

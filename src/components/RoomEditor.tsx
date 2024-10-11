@@ -23,28 +23,41 @@ const RoomEditor: React.FC<RoomEditorProps> = ({ room, onRoomUpdate }) => {
       const offset = monitor.getClientOffset();
       if (!dropArea || !offset) return;
 
-      // Calculate rack position relative to the room
-      const x = ((offset.x - dropArea.left) / dropArea.width) * updatedRoom.width;
-      const y = ((offset.y - dropArea.top) / dropArea.height) * updatedRoom.height;
+      const existingRack = updatedRoom.racks.find(rack => rack.id === item.id);
+      if (existingRack) {
+        // Update position of existing rack
+        const x = ((offset.x - dropArea.left) / dropArea.width) * updatedRoom.width;
+        const y = ((offset.y - dropArea.top) / dropArea.height) * updatedRoom.height;
 
-      const newRack = {
-        ...item, // data from the dragged rack
-        id: uuidv4(), // Generate a unique ID for each new rack
-        frontSideDirection: 'north', // Set default direction
-        x,
-        y,
-      };
+        const updatedRacks = updatedRoom.racks.map(rack => 
+          rack.id === item.id ? { ...rack, x, y } : rack
+        );
 
-      console.log(newRack);
+        const newRoom = { ...updatedRoom, racks: updatedRacks };
+        setUpdatedRoom(newRoom);
+        onRoomUpdate(newRoom);
+      } else {
+        // Add new rack to the room
+        const x = ((offset.x - dropArea.left) / dropArea.width) * updatedRoom.width;
+        const y = ((offset.y - dropArea.top) / dropArea.height) * updatedRoom.height;
 
-      // Update room with the new rack
-      const updatedRacks = [...updatedRoom.racks, newRack];
-      const newRoom = { ...updatedRoom, racks: updatedRacks };
-      setUpdatedRoom(newRoom);
-      onRoomUpdate(newRoom); // Save changes to room
+        const newRack = {
+          ...item, // data from the dragged rack
+          id: uuidv4(), // Generate a unique ID for each new rack
+          frontSideDirection: 'north', // Set default direction
+          x,
+          y,
+        };
+
+        // Update room with the new rack
+        const updatedRacks = [...updatedRoom.racks, newRack];
+        const newRoom = { ...updatedRoom, racks: updatedRacks };
+        setUpdatedRoom(newRoom);
+        onRoomUpdate(newRoom); // Save changes to room
+      }
     },
     collect: (monitor) => ({
-      isOver: !!monitor.isOver(),
+      isOver: monitor.isOver(),
     }),
   });
 
