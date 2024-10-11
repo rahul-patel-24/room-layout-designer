@@ -117,7 +117,7 @@ const RoomEditor: React.FC<RoomEditorProps> = ({ room, onRoomUpdate }) => {
           alignItems="center"
           width={{ xs: '100%', md: '80%' }}
         >
-          <RoomPreview room={updatedRoom} onRackRotate={handleRackRotate} onRackDelete={handleRackDelete} />
+          <RoomPreview room={{ ...updatedRoom, door: room?.door }} onRackRotate={handleRackRotate} onRackDelete={handleRackDelete} />
         </Box>
       </Box>
     </Paper>
