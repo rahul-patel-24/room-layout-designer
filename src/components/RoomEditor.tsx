@@ -3,7 +3,7 @@ import { Box, Typography, Paper } from '@mui/material';
 import RoomPreview from './RoomPreview';
 import RackStore from './RackStore';
 import { useDrop } from 'react-dnd';
-import { Room } from '../types';
+import { Rack, Room } from '../types';
 import { v4 as uuidv4 } from 'uuid';
 
 interface RoomEditorProps {
@@ -13,47 +13,41 @@ interface RoomEditorProps {
 
 const RoomEditor: React.FC<RoomEditorProps> = ({ room, onRoomUpdate }) => {
   const [updatedRoom, setUpdatedRoom] = useState(room);
-  const roomRef = useRef<HTMLDivElement>(null);
+  const roomRef = useRef<HTMLDivElement | null>(null);
 
   // Drop target for racks dragged into the room
-  const [{ isOver }, dropRef] = useDrop({
+  const [, dropRef] = useDrop({
     accept: 'RACK',
-    drop: (item: any, monitor) => {
+    drop: (item: Rack, monitor) => {
       const dropArea = roomRef.current?.getBoundingClientRect();
       const offset = monitor.getClientOffset();
       if (!dropArea || !offset) return;
 
-      const existingRack = updatedRoom.racks.find(rack => rack.id === item.id);
+      const existingRack = updatedRoom.racks.find((rack) => rack.id === item.id);
+      const x = ((offset.x - dropArea.left) / dropArea.width) * updatedRoom.width;
+      const y = ((offset.y - dropArea.top) / dropArea.height) * updatedRoom.height;
+
       if (existingRack) {
         // Update position of existing rack
-        const x = ((offset.x - dropArea.left) / dropArea.width) * updatedRoom.width;
-        const y = ((offset.y - dropArea.top) / dropArea.height) * updatedRoom.height;
-
-        const updatedRacks = updatedRoom.racks.map(rack => 
+        const updatedRacks = updatedRoom.racks.map((rack) =>
           rack.id === item.id ? { ...rack, x, y } : rack
         );
-
         const newRoom = { ...updatedRoom, racks: updatedRacks };
         setUpdatedRoom(newRoom);
         onRoomUpdate(newRoom);
       } else {
         // Add new rack to the room
-        const x = ((offset.x - dropArea.left) / dropArea.width) * updatedRoom.width;
-        const y = ((offset.y - dropArea.top) / dropArea.height) * updatedRoom.height;
-
         const newRack = {
-          ...item, // data from the dragged rack
-          id: uuidv4(), // Generate a unique ID for each new rack
-          frontSideDirection: 'north', // Set default direction
+          ...item,
+          id: uuidv4(),
+          frontSideDirection: 'north',
           x,
           y,
         };
-
-        // Update room with the new rack
         const updatedRacks = [...updatedRoom.racks, newRack];
         const newRoom = { ...updatedRoom, racks: updatedRacks };
         setUpdatedRoom(newRoom);
-        onRoomUpdate(newRoom); // Save changes to room
+        onRoomUpdate(newRoom);
       }
     },
     collect: (monitor) => ({
@@ -61,7 +55,7 @@ const RoomEditor: React.FC<RoomEditorProps> = ({ room, onRoomUpdate }) => {
     }),
   });
 
-  const handleRackRotate = (rackId: string) => {
+  const handleRackRotate = (rackId: string | number) => {
     setUpdatedRoom((prevRoom) => {
       const updatedRacks = prevRoom.racks.map((rack) => {
         if (rack.id === rackId) {
@@ -72,12 +66,12 @@ const RoomEditor: React.FC<RoomEditorProps> = ({ room, onRoomUpdate }) => {
         return rack;
       });
       const newRoom = { ...prevRoom, racks: updatedRacks };
-      onRoomUpdate(newRoom); // Update the room state
+      onRoomUpdate(newRoom);
       return newRoom;
     });
   };
 
-  const handleRackDelete = (rackId: string) => {
+  const handleRackDelete = (rackId: string | number) => {
     setUpdatedRoom((prevRoom) => {
       const updatedRacks = prevRoom.racks.filter((rack) => rack.id !== rackId);
       const newRoom = { ...prevRoom, racks: updatedRacks };
@@ -105,13 +99,16 @@ const RoomEditor: React.FC<RoomEditorProps> = ({ room, onRoomUpdate }) => {
           </Typography>
           <Box>
             <ul style={{ paddingLeft: '15px' }}>
-              <li><span style={{ color: 'green', fontWeight: 'bold' }}>Green</span> represents the front side of the rack.</li>
-              <li><span style={{ color: 'red', fontWeight: 'bold' }}>Red</span> represents the back side of the rack.</li>
+              <li>
+                <span style={{ color: 'green', fontWeight: 'bold' }}>Green</span> represents the front side of the rack.
+              </li>
+              <li>
+                <span style={{ color: 'red', fontWeight: 'bold' }}>Red</span> represents the back side of the rack.
+              </li>
               <li>Drag these racks into the room to place them.</li>
             </ul>
           </Box>
 
-          {/* RackStore to drag racks from */}
           <Box display="flex" flexDirection="column" gap={2}>
             <RackStore width={120} height={75} id="rack1" x={0} y={0} frontSideDirection="north" />
             <RackStore width={120} height={100} id="rack2" x={0} y={0} frontSideDirection="north" />
@@ -119,11 +116,10 @@ const RoomEditor: React.FC<RoomEditorProps> = ({ room, onRoomUpdate }) => {
           </Box>
         </Box>
 
-        {/* Drop area */}
         <Box
-          ref={(node) => {
-            dropRef(node);
-            roomRef.current = node;
+           ref={(node: HTMLDivElement | null) => {
+            dropRef(node); // Pass the node to the drop ref
+            roomRef.current = node; // Assign the node to the room ref
           }}
           display="flex"
           justifyContent="center"

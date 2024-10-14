@@ -1,4 +1,4 @@
-import React, { useState, forwardRef, useImperativeHandle } from 'react';
+import { useState, forwardRef, useImperativeHandle, useRef } from 'react';
 import { Box, IconButton } from '@mui/material';
 import { Rack as RackType } from '../types';
 import { faSyncAlt, faTrash } from '@fortawesome/free-solid-svg-icons';
@@ -8,18 +8,35 @@ import { useDrag, useDrop } from 'react-dnd';
 interface RackProps extends RackType {
   roomWidth: number;
   roomHeight: number;
-  onRotate: (id: string) => void;
-  onDelete: (id: string) => void;
-  onDragEnd: (id: string, newX: number, newY: number) => void; // Function to handle drag end
+  onRotate: (id: string | number) => void;
+  onDelete: (id: string | number) => void;
+  // onDragEnd: (id: string | number, newX: number, newY: number) => void;
 }
 
 // Forward ref to allow parent components to access the Rack ref if needed
-const Rack = forwardRef<RackProps, RackProps>(
-  ({ width, height, x, y, frontSideDirection, id, roomWidth, roomHeight, onRotate, onDelete, onDragEnd }, ref) => {
+const Rack = forwardRef<unknown, RackProps>(
+  (
+    {
+      width,
+      height,
+      x,
+      y,
+      frontSideDirection,
+      id,
+      roomWidth,
+      roomHeight,
+      onRotate,
+      onDelete,
+      // onDragEnd,
+    },
+    ref
+  ) => {
     const [hovered, setHovered] = useState(false);
+    const elementRef = useRef<HTMLDivElement>(null);
+
     const [{ isDragging }, dragRef] = useDrag({
       type: 'RACK',
-      item: { id, width, height, frontSideDirection, x, y }, // Include current positions
+      item: { id, width, height, frontSideDirection, x, y },
       collect: (monitor) => ({
         isDragging: monitor.isDragging(),
       }),
@@ -27,24 +44,23 @@ const Rack = forwardRef<RackProps, RackProps>(
 
     const [, dropRef] = useDrop({
       accept: 'RACK',
-      drop: (item: any, monitor) => {
+      drop: (_item: RackType, monitor) => {
         const dropArea = monitor.getClientOffset();
         if (!dropArea) return;
 
-        // Calculate new positions in pixels
-        const newX = dropArea.x - (roomWidth * (width / 100)) / 2; // Centering
-        const newY = dropArea.y - (roomHeight * (height / 100)) / 2; // Centering
+        // const newX = (dropArea.x / roomWidth) * 100 - width / 2;
+        // const newY = (dropArea.y / roomHeight) * 100 - height / 2;
 
-        // Call the onDragEnd function to update the position
-        onDragEnd(id, newX, newY);
+        // onDragEnd(id, newX, newY);
       },
     });
 
-    // Merge refs for dragging and dropping
-    useImperativeHandle(ref, () => ({
-      dragRef: dragRef.current,
-      dropRef: dropRef.current,
-    }));
+    // Merge refs for drag and drop
+    dragRef(elementRef);
+    dropRef(elementRef);
+
+    // Expose the elementRef to the parent component via useImperativeHandle
+    useImperativeHandle(ref, () => elementRef.current);
 
     const calculateRackSize = (rackWidth: number, rackHeight: number) => ({
       width: (rackWidth / roomWidth) * 100,
@@ -90,10 +106,7 @@ const Rack = forwardRef<RackProps, RackProps>(
 
     return (
       <Box
-        ref={(node) => {
-          dragRef(node); // Apply drag ref
-          dropRef(node); // Apply drop ref
-        }} // Combine refs here
+        ref={elementRef}
         sx={{
           position: 'absolute',
           width: `${rackWidth}%`,
@@ -115,7 +128,6 @@ const Rack = forwardRef<RackProps, RackProps>(
       >
         Rack {height} * {width}
 
-        {/* Rotate and Delete Icons */}
         {hovered && (
           <Box
             sx={{
