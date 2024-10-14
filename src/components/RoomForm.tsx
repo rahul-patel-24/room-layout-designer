@@ -15,6 +15,31 @@ interface RoomFormProps {
   height: number;
 }
 
+/**
+ * RoomForm Component
+ *
+ * This form allows users to add or edit room details, including room dimensions, 
+ * door configuration, and basic information like name and address. 
+ * 
+ * Features:
+ * - Handles form input and validation (e.g., max room dimensions).
+ * - Updates the door state dynamically via `handleDoorChange`.
+ * - Supports both **add mode** and **edit mode** using `isEditMode`.
+ *
+ * Parent:
+ * - app.tsx.
+ *
+ * Props:
+ * - `room`: The room being edited or `null` for a new room.
+ * - `onAddRoom`: Callback to handle adding or updating a room.
+ * - `isEditMode`: Determines if the form is in edit mode.
+ * - `setEditingRoom`: Resets the editing state (sets the room to `null`).
+ * - `setWidth`, `setHeight`: Handlers to update room dimensions.
+ * - `setDoor`: Updates the door state.
+ * - `door`: Current state of the door configuration.
+ * - `width`, `height`: Current width and height of the room.
+ */
+
 const MAX_WIDTH = 1000;
 const MAX_HEIGHT = 1000;
 

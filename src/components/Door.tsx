@@ -2,6 +2,28 @@ import React from 'react';
 import { Box } from '@mui/material';
 import { DoorProps } from '../types.ts';
 
+/**
+ * Door Component
+ *
+ * This component visually represents a door on a room layout.
+ * It is styled based on its position and direction (top, bottom, left, right).
+ *
+ * Purpose:
+ * - To provide a visual representation of a door in a room.
+ * - Adjusts its size and position based on given properties.
+ * 
+ * Parent:
+ * - Roompreview 
+ *
+ * Props:
+ * - `width`: The width of the door.
+ * - `direction`: The direction the door opens (left, right, top, bottom).
+ * - `position`: The position of the door along the wall it is placed on.
+ *
+ * Dependencies:
+ * - Utilizes `@mui/material` for layout and styling.
+ */
+
 const Door: React.FC<DoorProps> = ({ width, direction, position }) => {
   const doorStyles = {
     position: 'absolute',

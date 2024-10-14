@@ -13,6 +13,29 @@ interface RackProps extends RackType {
   // onDragEnd: (id: string | number, newX: number, newY: number) => void;
 }
 
+/**
+ * Rack Component
+ *
+ * Represents an individual rack in the room layout. 
+ * It supports drag-and-drop functionality, along with options to rotate or delete the rack.
+ *
+ * Params:
+ * - width: The width of the rack.
+ * - height: The height of the rack.
+ * - x, y: The position of the rack as percentages relative to the room size.
+ * - frontSideDirection: Indicates the direction the front side of the rack faces (north, south, east, or west).
+ * - id: Unique identifier for the rack.
+ * - roomWidth, roomHeight: Dimensions of the room for position and size calculations.
+ * - onRotate: Callback function triggered when the rack is rotated.
+ * - onDelete: Callback function triggered when the rack is deleted.
+ *
+ * Parent:
+ * - RoomPreview: Uses the Rack component to display racks inside the room.
+ *
+ * Child:
+ * - FontAwesomeIcon: Used to render icons for rotate and delete actions.
+ */
+
 // Forward ref to allow parent components to access the Rack ref if needed
 const Rack = forwardRef<unknown, RackProps>(
   (

@@ -11,6 +11,28 @@ interface RoomEditorProps {
   onRoomUpdate: (updatedRoom: Room) => void;
 }
 
+/**
+ * RoomEditor Component
+ * 
+ * Manages the layout of racks within a room using drag-and-drop functionality.
+ * Allows the user to add, rotate, or delete racks and updates the room state accordingly.
+ * 
+ * Params:
+ * - room: The room object with its dimensions and existing racks.
+ * - onRoomUpdate: Callback function to update the room state in the parent component.
+ * 
+ * Parent:
+ * - App (Renders RoomEditor inside RoomForm during editing)
+ * 
+ * Child:
+ * - RoomPreview: Displays the visual representation of the room with racks.
+ * - RackStore: Provides draggable rack items for placement inside the room.
+ * 
+ * Uses:
+ * - React DnD for drag-and-drop functionality.
+ * - Material-UI components for styling.
+ */
+
 const RoomEditor: React.FC<RoomEditorProps> = ({ room, onRoomUpdate }) => {
   const [updatedRoom, setUpdatedRoom] = useState(room);
   const roomRef = useRef<HTMLDivElement | null>(null);
